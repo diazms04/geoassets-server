@@ -1,0 +1,16 @@
+require('dotenv').config();
+const mongoose = require('mongoose');
+
+const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DB_URI);
+    console.log('✅ MongoDB Atlas conectado correctamente');
+  } catch (error) {
+    console.error('🚀 ERROR: No se pudo conectar a MongoDB', error);
+    process.exit(1); // Termina la app si no se conecta
+  }
+};
+
+module.exports = connectDB;

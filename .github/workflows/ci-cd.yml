@@ -1,0 +1,74 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: ['main', 'develop', '**']
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: aws
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ECR_REPOSITORY_FRONTEND: ${{ secrets.ECR_REPOSITORY_FRONTEND }}
+      ECR_REPOSITORY_BACKEND: ${{ secrets.ECR_REPOSITORY_BACKEND }}
+      ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
+      ECS_SERVICE_FRONTEND: ${{ secrets.ECS_SERVICE_FRONTEND }}
+      ECS_SERVICE_BACKEND: ${{ secrets.ECS_SERVICE_BACKEND }}
+
+      # Backend secrets
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      API_VERSION: ${{ secrets.API_VERSION }}
+      IP_SERVER: ${{ secrets.IP_SERVER }}
+      ALLOWED_ORIGIN: ${{ secrets.ALLOWED_ORIGIN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      # ---- CI ----
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: ./geoassets-client-main
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./geoassets-client-main
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./geoassets-server-main
+
+      # ---- CD ----
+      - name: Login to AWS ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Build & push frontend Docker image
+        run: |
+          docker build -t $ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8} ./geoassets-client-main
+          docker tag $ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8} $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8}
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8}
+
+      - name: Build & push backend Docker image
+        run: |
+          docker build -t $ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8} ./geoassets-server-main
+          docker tag $ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8} $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8}
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8}
+
+      - name: Update frontend ECS service
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_FRONTEND --force-new-deployment
+
+      - name: Update backend ECS service
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_BACKEND --force-new-deployment

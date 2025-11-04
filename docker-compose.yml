@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  backend:
+    image: geoassets-backend
+    build:
+      context: ./geoassets-server-main
+    networks:
+      - creinnova-network
+    environment: 
+      - PORT=3000
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - API_VERSION=${API_VERSION}
+      - IP_SERVER=${IP_SERVER}
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
+
+  frontend:
+    image: geoassets-frontend
+    build:
+      context: ./geoassets-client-main
+    networks:
+      - creinnova-network
+    depends_on:
+      - backend
+
+networks:
+  creinnova-network:
+    driver: bridge

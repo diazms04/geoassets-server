@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/:path*",
+      "destination": "https://creinnova.onrender.com/api/v1/:path*"
+    },
+    { 
+      "source": "/(.*)", 
+      "destination": "/" 
+    }
+  ]
+}
