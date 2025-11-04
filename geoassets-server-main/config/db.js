@@ -1,6 +1,12 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
+console.log('🔹 DEBUG: Variables de entorno MongoDB');
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '*****' : undefined);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_NAME:', process.env.DB_NAME);
+
 const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 const connectDB = async () => {
