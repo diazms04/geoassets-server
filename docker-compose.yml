@@ -7,6 +7,8 @@ services:
       context: ./geoassets-server-main
     networks:
       - creinnova-network
+    ports:
+      - "3000:3000"
     environment: 
       - PORT=3000
       - MONGODB_URI=${MONGODB_URI}
@@ -19,10 +21,13 @@ services:
     image: geoassets-frontend
     build:
       context: ./geoassets-client-main
+    ports:
+      - "5173:80"   # mapea el puerto del Nginx
     networks:
       - creinnova-network
     depends_on:
       - backend
+      
 
 networks:
   creinnova-network:
