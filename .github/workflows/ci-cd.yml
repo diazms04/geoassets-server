@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: geoassets_aws
     env:
+      # AWS
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -20,11 +21,15 @@ jobs:
       ECS_SERVICE_BACKEND: ${{ secrets.ECS_SERVICE_BACKEND }}
 
       # Backend secrets
-      MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-      API_VERSION: ${{ secrets.API_VERSION }}
+      PORT: ${{ secrets.PORT }}
       IP_SERVER: ${{ secrets.IP_SERVER }}
+      API_VERSION: ${{ secrets.API_VERSION }}
       ALLOWED_ORIGIN: ${{ secrets.ALLOWED_ORIGIN }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
     steps:
       - name: Checkout code
@@ -55,15 +60,19 @@ jobs:
 
       - name: Build & push frontend Docker image
         run: |
-          docker build -t $ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8} ./geoassets-client-main
+          docker build -t $ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8} -t $ECR_REPOSITORY_FRONTEND:latest ./geoassets-client-main
           docker tag $ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8} $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8}
+          docker tag $ECR_REPOSITORY_FRONTEND:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:latest
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:${GITHUB_SHA::8}
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_FRONTEND:latest
 
       - name: Build & push backend Docker image
         run: |
-          docker build -t $ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8} ./geoassets-server-main
+          docker build -t $ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8} -t $ECR_REPOSITORY_BACKEND:latest ./geoassets-server-main
           docker tag $ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8} $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8}
+          docker tag $ECR_REPOSITORY_BACKEND:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:latest
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:${GITHUB_SHA::8}
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_BACKEND:latest
 
       - name: Update frontend ECS service
         run: |
