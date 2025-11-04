@@ -20,17 +20,6 @@ jobs:
       ECS_SERVICE_FRONTEND: ${{ secrets.ECS_SERVICE_FRONTEND }}
       ECS_SERVICE_BACKEND: ${{ secrets.ECS_SERVICE_BACKEND }}
 
-      # Backend secrets
-      PORT: ${{ secrets.PORT }}
-      IP_SERVER: ${{ secrets.IP_SERVER }}
-      API_VERSION: ${{ secrets.API_VERSION }}
-      ALLOWED_ORIGIN: ${{ secrets.ALLOWED_ORIGIN }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_NAME: ${{ secrets.DB_NAME }}
-      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
