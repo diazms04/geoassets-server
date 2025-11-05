@@ -14,9 +14,6 @@ app.use(bodyParser.json());
 app.use(express.static('uploads'));
 
 // Configuración de CORS
-// Nota: Se ha eliminado ALLOWED_ORIGIN dinámico.
-// Actualmente permite cualquier origen ('*') para desarrollo.
-// En producción, reemplaza '*' por un array de dominios permitidos.
 app.use(cors({
   origin: '*',
   optionsSuccessStatus: 200
@@ -29,5 +26,12 @@ const user = require('./router/user');
 // Rutas principales
 app.use(`/api/${API_VERSION}`, auth);
 app.use(`/api/${API_VERSION}`, user);
+
+// -----------------------------
+// Endpoint de health check
+// -----------------------------
+app.get('/health', (req, res) => {
+  res.sendStatus(200); // Devuelve HTTP 200 OK
+});
 
 module.exports = app;
