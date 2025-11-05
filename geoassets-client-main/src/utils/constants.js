@@ -1,7 +1,7 @@
 const ROUTES = {};
 
 const API_VERSION = "api/v1";
-const HOST = "http://localhost:3000";
+const HOST = "https://localhost:3000";
 // const HOST = "";
 
 export {
