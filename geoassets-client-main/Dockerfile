@@ -25,6 +25,9 @@ RUN rm -rf /usr/share/nginx/html/*
 # Copiar dist desde la etapa de build
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Cnfigurar rutas nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Exponer puerto 80
 EXPOSE 80
 
