@@ -13,13 +13,12 @@ services:
       - PORT=${PORT}
       - IP_SERVER=${IP_SERVER}
       - API_VERSION=${API_VERSION}
-      #- ALLOWED_ORIGIN=${ALLOWED_ORIGIN}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
       - DB_NAME=${DB_NAME}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
-
+      - API_SECRET_KEY=${API_SECRET_KEY}
   frontend:
     image: geoassets-frontend
     build:

@@ -1,5 +1,8 @@
 import { API_VERSION, HOST } from "../utils";
 
+const API_KEY = import.meta.env.VITE_API_SECRET_KEY; 
+
+
 export class Auth {
 
   async postSignUp(formData) {
@@ -9,6 +12,8 @@ export class Auth {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+
         },
         body: JSON.stringify(formData)
       };
@@ -30,6 +35,8 @@ export class Auth {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": API_KEY, 
+
         },
         body: JSON.stringify(formData)
       };
@@ -51,6 +58,7 @@ export class Auth {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": API_KEY,
         },
         body: JSON.stringify({ token: refreshToken }),
       };

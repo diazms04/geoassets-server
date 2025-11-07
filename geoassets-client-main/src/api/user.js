@@ -1,5 +1,7 @@
 import { API_VERSION, HOST } from "../utils";
 
+const API_KEY = import.meta.env.VITE_API_SECRET_KEY; 
+
 export class User {
 
   async getMe(accessToken) {
@@ -8,6 +10,7 @@ export class User {
       const params = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "x-api-key": API_KEY,
         },
       };
 
@@ -26,7 +29,10 @@ export class User {
       const url = `${HOST}/${API_VERSION}/auth/signup`;
       const params = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+          },
         body: JSON.stringify(formData),
       };
 
@@ -43,7 +49,10 @@ export class User {
       const url = `${HOST}/${API_VERSION}/auth/signin`;
       const params = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+          },
         body: JSON.stringify(formData),
       };
 
