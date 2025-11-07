@@ -8,7 +8,7 @@ const app = express();
 // Variables de entorno
 const API_VERSION = process.env.API_VERSION || 'v1'; // Versión de la API
 
-// Middlewares
+// Middlewares globales
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('uploads'));
@@ -19,16 +19,30 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-// Importar rutas
+// -----------------------------
+// Importar middleware de API key
+// -----------------------------
+const apiKeyAuth = require('./middlewares/apiKeyAuth');
+
+// -----------------------------
+// Importar routers
+// -----------------------------
 const auth = require('./router/auth');
 const user = require('./router/user');
 
+// -----------------------------
+// Aplicar middleware de API key a TODAS las rutas de la API
+// -----------------------------
+app.use(`/api/${API_VERSION}`, apiKeyAuth);
+
+// -----------------------------
 // Rutas principales
+// -----------------------------
 app.use(`/api/${API_VERSION}`, auth);
 app.use(`/api/${API_VERSION}`, user);
 
 // -----------------------------
-// Endpoint de health check
+// Endpoint de health check (no protegido)
 // -----------------------------
 app.get('/health', (req, res) => {
   res.sendStatus(200); // Devuelve HTTP 200 OK
