@@ -24,7 +24,7 @@ async function postUser(req, res) {
       phone,
       address,
       role: 'admin',          // por defecto el primer registro es admin
-      licenseStatus: 'pending' // licencia pendiente
+      licenseStatus: 'active' // licencia pendiente
     });
 
     // Hashear contraseña

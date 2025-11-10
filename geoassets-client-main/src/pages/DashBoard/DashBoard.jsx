@@ -1,13 +1,13 @@
 import { useAuth } from '../../hooks/useAuth'
-import { TopBar } from "../../Components/TopBar/TopBar";
+
 import "./DashBoard.scss";
 
 export function DashBoard() {
-  const { user, accessToken, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className="section-home">
-      <TopBar />
+
 
       <h1>Dashboard</h1>
 
@@ -21,8 +21,6 @@ export function DashBoard() {
               </li>
             ))}
           </ul>
-
-          <p><strong>Token de acceso:</strong> {accessToken}</p>
 
           <button onClick={logout}>Cerrar sesión</button>
         </div>

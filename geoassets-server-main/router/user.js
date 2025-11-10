@@ -5,6 +5,5 @@ const { asureAuth } = require('../middlewares/authenticated');
 const api = express();
 
 api.get('/user/me', [asureAuth], UserController.getMe);
-api.get('/users', UserController.getAllUsers);
 
 module.exports = api

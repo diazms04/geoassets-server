@@ -1,0 +1,51 @@
+.topbar-company {
+  background: #0A1931;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  /* 🔹 Lado izquierdo (logo + título) */
+  .topbar-company-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .topbar-company-logo {
+      height: 36px; /* igual que el topbar normal */
+      width: auto;
+      object-fit: contain;
+    }
+
+    .topbar-company-title {
+      color: #fff;
+      font-size: 20px; /* igual que el topbar normal */
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  /* 🔹 Lado derecho (avatar con menú) */
+  .topbar-company-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .ant-avatar {
+      background-color: #1890ff;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}

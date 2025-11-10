@@ -7,7 +7,8 @@ console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '*****' : undefined);
 console.log('DB_HOST:', process.env.DB_HOST);
 console.log('DB_NAME:', process.env.DB_NAME);
 
-const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+// const DB_URI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+const DB_URI = 'mongodb://localhost:27017/geoasset';
 
 const connectDB = async () => {
   try {

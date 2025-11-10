@@ -51,9 +51,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
+  licenseIssuedAt: {
+  type: Date,
+  default: Date.now
+  },
+  licenseExpiresAt: {
+    type: Date
   }
 });
 
